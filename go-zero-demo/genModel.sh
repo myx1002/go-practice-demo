@@ -8,6 +8,7 @@
 
 #生成的表名
 tables=$2
+
 #表生成的genmodel目录
 modeldir=./userapi/model
 

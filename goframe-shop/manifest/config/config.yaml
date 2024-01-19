@@ -1,0 +1,43 @@
+server:
+  address:     ":8000"
+  openapiPath: "/api.json"
+  swaggerPath: "/swagger"
+
+# 数据库连接配置
+database:
+  logger:
+    path:    "temp/logs/sql"
+    level:   "all"
+    stdout:  true
+    ctxKeys: ["RequestId"]
+
+  default:
+    # 设置+8时区和时间格式化：?loc=Local&parseTime=true
+    link:   "mysql:root:941002@tcp(127.0.0.1:3306)/shop?loc=Local&parseTime=true"
+    debug:  true
+
+logger:
+  level : "all"
+  stdout: true
+
+# Redis 配置示例
+redis:
+  # 单实例配置示例1
+  default:
+    address: 127.0.0.1:6379
+    pass: 941002
+    db:      1
+    idleTimeout: 600
+
+aliyunoss:
+  bucket: "moyuxing"
+  endpoint: "https://oss-cn-guangzhou.aliyuncs.com"
+  accessKeyId: "LTAI5tC1HTgf7UFsG3q6Rp2p"
+  accessKeySecret: "CDxqwO9TiqkdRo25X4xISnhcdq1xuf"
+  ossUrl: "https://moyuxing.oss-cn-guangzhou.aliyuncs.com/"
+
+
+
+# 文件上传路径
+upload:
+  path: "upload"

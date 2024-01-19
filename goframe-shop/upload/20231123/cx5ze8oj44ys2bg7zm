@@ -1,0 +1,63 @@
+LxRunOffline.exe install -n centos -d D:\centos -f D:\centos-7.8.2003-x86_64-docker.tar.xz
+wsl --import Ubuntu-18.04 D:ubuntu D:Ubuntu-18.04.tar
+wsl --set-version centos 2
+
+
+git config --global http.proxy http://127.0.0.1:33210
+git config --global https.proxy https://172.31.240.1:7890
+
+git config  http.proxy http://172.31.240.1:7890
+git config https.proxy https://172.31.240.1:7890
+
+
+git config --global http.proxy 'socks5://192.168.1.166:1095'
+git config --global https.proxy 'socks5://192.168.1.166:1095'
+
+
+
+git config --global --unset http.proxy
+git config  --unset http.proxy
+git config --global --unset https.proxy
+git config --unset https.proxy
+export ALL_PROXY="http://192.168.224.1:7890"
+
+
+dos2unix web-install.sh
+
+netsh interface portproxy add v4tov4  listenport=7090 listenaddress=0.0.0.0 connectport=7090 connectaddress=192.168.193.168
+netsh interface portproxy add v4tov4  listenport=7002 listenaddress=0.0.0.0 connectport=7002 connectaddress=192.168.193.168
+netsh interface portproxy delete v4tov4 listenport=9211 listenaddress=0.0.0.0
+wsl代理设置
+cat /etc/resolv.conf|grep nameserver|awk '{print $2}'
+git config --global  https.proxy http://172.18.240.1:7890
+git config --global  http.proxy http://172.18.240.1:7890
+export ALL_PROXY="http://172.18.240.1:7890"
+unset http_proxy
+unset https_proxy
+ set -e https_proxy
+
+wsl -d centos -u root ip addr add 192.168.193.168/24 broadcast 192.168.207.255 dev eth0 label eth0:1
+netsh interface ip add address "vEthernet (WSL)" 192.168.193.169 255.255.255.240
+sysctl -w vm.max_map_count=262144
+composer install --ignore-platform-reqs --no-dev
+
+sudo du -h -m --max-depth=1 /usr/local/app/tars/app_log
+find /usr/local/app/tars/app_log/hlyun/ -name '*.log' | xargs rm
+
+重启框架服务: /usr/local/app/tars/tars-start.sh
+停止框架服务: /usr/local/app/tars/tars-stop.sh
+重启某个组件: /usr/local/app/tars/tarsxxxx/util/start.sh
+
+myx1002.github.io
+master
+myx1002
+963028983@qq.com
+令牌：fcd0565451e3c30f0a35f36b1c4c62dceb4203c4
+mofish.pily.life
+
+
+
+
+
+
+
