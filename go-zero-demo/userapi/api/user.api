@@ -45,8 +45,9 @@ type (
 )
 
 @server (
-	group:  user // api组
-	prefix: userapi/v1 // 路由组
+	group:      user // api组
+	prefix:     userapi/v1 // 路由组
+	middleware: TestMiddleware // 通过goctl api go自动生成中间件文件
 )
 // 定义 HTTP 服务
 // 微服务名称为 user_api，生成的代码目录和配置文件将和 user_api 值相关

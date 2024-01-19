@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 
+	"go-zero-demo/userapi/common/middleware"
 	"go-zero-demo/userapi/internal/config"
 	"go-zero-demo/userapi/internal/handler"
 	"go-zero-demo/userapi/internal/svc"
@@ -25,6 +26,9 @@ func main() {
 	// 启动server服务
 	server := rest.MustNewServer(c.RestConf)
 	defer server.Stop()
+
+	// 引入全局中间件
+	server.Use(middleware.NewGlobalTestMiddleware().Handle)
 
 	// 初始化上下文context，把一些配置加载到context中，例如上面的配置，还有Kafka、Redis等等可以引入
 	ctx := svc.NewServiceContext(c)
