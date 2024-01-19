@@ -13,17 +13,19 @@ import (
 	"github.com/zeromicro/go-zero/rest"
 )
 
-// 解析配置
+// 获取启动命令行参数，如果启动时没有-f参数，则默认读取"etc/userApi.yaml"配置
 var configFile = flag.String("f", "etc/userApi.yaml", "the config file")
 
 func main() {
+	// 解析命令行参数
 	flag.Parse()
 
-	// 把解析出来的配置文件内容复制给config对象
+	// 把解析出来的配置文件内容赋值给config对象
 	var c config.Config
 	conf.MustLoad(*configFile, &c)
 
 	// 启动server服务
+	// 包括日志上报、链路追踪、系统监控等等等
 	server := rest.MustNewServer(c.RestConf)
 	defer server.Stop()
 
