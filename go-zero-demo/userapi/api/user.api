@@ -1,0 +1,72 @@
+// api语法版本
+syntax = "v1"
+
+info (
+	author: "mmmmo"
+	date:   "2024-01-17"
+	desc:   "go-zero联系"
+)
+
+type (
+	// 定义用户信息接口的请求体
+	UserInfoReq {
+		UserId int64 `form:"user_id"` // get 方法参数
+	//        UserId int64 `json:"user_id"` // post json参数
+	//        UserId int64 `path:"user_id"` // get 路由参数，下面的路由需改成/user/info/:user_id
+	}
+	// 定义用户信息接口的响应体
+	UserInfoResp {
+		UserId int64  `json:"user_id"`
+		Name   string `json:"name"`
+	}
+)
+
+type (
+	// 定义修改用户信息接口的请求体
+	UserUpdateReq {
+		UserId int64  `json:"user_id"`
+		Name   string `json:"name"`
+	}
+	// 定义修改用户信息接口的响应体
+	UserUpdateResp {
+		Flag bool `json:"flag"`
+	}
+)
+
+type (
+	// 定义创建用户信息接口的请求体
+	UserCreateReq {
+		Name string `json:"name"`
+	}
+	// 定义创建用户信息接口的响应体
+	UserCreateResp {
+		Flag bool `json:"flag"`
+	}
+)
+
+@server (
+	group:  user // api组
+	prefix: userapi/v1 // 路由组
+)
+// 定义 HTTP 服务
+// 微服务名称为 user_api，生成的代码目录和配置文件将和 user_api 值相关
+service user_api {
+	@doc "获取用户信息"
+	// 定义 http.HandleFunc 转换的 go 文件名称及方法
+	@handler UserInfo
+	// 定义接口
+	// 请求方法为 post
+	// 路由为 /user/login
+	// 请求体为 LoginReq
+	// 响应体为 LoginResp，响应体必须有 returns 关键字修饰
+	get /user/info (UserInfoReq) returns (UserInfoResp)
+
+	@doc "修改用户信息"
+	@handler UserUpdate
+	post /user/update (UserUpdateReq) returns (UserUpdateResp)
+
+	@doc "新建用户信息"
+	@handler UserCreate
+	post /user/create (UserCreateReq) returns (UserCreateResp)
+}
+

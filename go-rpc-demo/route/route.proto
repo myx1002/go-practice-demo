@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+option go_package = "./go-rpc-demo";
+
+package route;
+
+/*
+描述一个向导服务，服务名为RouteGuide
+定义四种不同的信息类型分别为Point, Rectangle, Feature, RouteSummary以及Chat 。
+定义四个方法
+1. GetFeature (输入为一个Point,返回这个点的Feature)
+2. ListFeatures (输入为一个Rectangle, 输出流这个区域内所有的Feature)
+3. RecordRoute (输入流为每个时间点的位置Point,返回一个RouteSummary，即经过点的数量、距离和时间)
+4. Recommend (输入流RecommendationRequest, 输出流Feature)
+
+自动生成命令：
+protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative route.proto
+
+route.pb.go：用于生成与消息和枚举相关的代码的选项，即message相关的信息。
+route_grpc.pb.go:用于生成 gRPC 服务端和客户端代码的选项。包括服务接口、服务实现、客户端存根等。即对service里方法的实现。
+*/
+
+message Point {
+  int64 latitude = 1;
+  int64 longitude = 2;
+}
+
+message Rectangle {
+  Point lo = 1;
+  Point hi = 2;
+}
+
+message Feature {
+  string name = 1;
+  Point location = 2;
+}
+
+message RouteSummary {
+  int64 point_count = 1; // 一共经过多少个点
+  int64 distance = 2; // 走了多少距离
+  int64 elapsed_time = 3; // 花费了多少时间
+}
+
+// 枚举值的序号是从0开始的，与message不同
+enum RecommendationMode {
+  GetFarthest = 0;
+  GetNearest  = 1;
+}
+
+message RecommendationRequest{
+    RecommendationMode mode = 1;
+    Point point = 2;
+}
+
+service RouteGuide {
+  // Unary
+  rpc GetFeature(Point) returns (Feature) {};
+  // Server-side streaming 服务端流式
+  rpc ListFeatures(Rectangle) returns (stream Feature) {};
+  // Client-side streaming 客户端流式
+  rpc RecordRoute(stream Point) returns (RouteSummary) {};
+  // Bidirectional streaming 双向流式
+  rpc Recommend(stream RecommendationRequest) returns (stream Feature) {};
+}
