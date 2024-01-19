@@ -4,6 +4,18 @@ Port: 8888
 
 DB:
   DataSource: root:941002@tcp(192.168.1.166:3306)/bubble?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
+
+# https://go-zero.dev/docs/tutorials/go-zero/configuration/log
+Log:
+  ServiceName: user_api
+  Encoding: plain
+  Mode: console
+  Level: info
+  Stat: false
+  KeepDays: 7
+  Rotation: daily
+  Compress: true
+
 Cache:
   - Host: 192.168.1.166:6379
     Pass: '941002'
