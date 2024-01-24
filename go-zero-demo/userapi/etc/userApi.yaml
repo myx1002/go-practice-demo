@@ -10,6 +10,8 @@ OrderRpcConf:
     Hosts:
     - 127.0.0.1:2379
     Key: order.rpc
+#  Endpoints:
+#    - 127.0.0.1:8081 #填写服务端端口
 
 # https://go-zero.dev/docs/tutorials/go-zero/configuration/log
 Log:

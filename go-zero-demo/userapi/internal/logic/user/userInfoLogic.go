@@ -8,6 +8,7 @@ import (
 	"go-zero-demo/orderrpc/order_pb"
 	"go-zero-demo/userapi/internal/svc"
 	"go-zero-demo/userapi/internal/types"
+	"go-zero-demo/userapi/model"
 )
 
 type UserInfoLogic struct {
@@ -25,9 +26,11 @@ func NewUserInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UserInfo
 }
 
 func (l *UserInfoLogic) UserInfo(req *types.UserInfoReq) (resp *types.UserInfoResp, err error) {
-	user, err := l.svcCtx.OrderRpcClient.GetOrderInfo(l.ctx, &order_pb.GetOrderInfoReq{Id: 1})
-	if err != nil {
-		return nil, err
+
+	user, err := l.svcCtx.OrderRpcClient.GetOrderInfo(l.ctx, &order_pb.GetOrderInfoReq{Id: req.UserId})
+
+	if err != nil || err == model.ErrNotFound {
+		return &types.UserInfoResp{UserId: 0, Name: "unknown"}, err
 	}
 
 	return &types.UserInfoResp{UserId: user.Id, Name: user.Name}, nil
