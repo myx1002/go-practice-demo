@@ -43,7 +43,6 @@ func main() {
 }
 
 func TestServerInterceptor(ctx context.Context, req any, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp any, err error) {
-
 	fmt.Printf("TestServerInterceptor =======> start \n")
 	fmt.Printf("TestServerInterceptor-info =======> %v \n", info)
 	fmt.Printf("TestServerInterceptor-req =======> %v \n", req)
@@ -52,7 +51,6 @@ func TestServerInterceptor(ctx context.Context, req any, info *grpc.UnaryServerI
 	res, err := handler(ctx, req)
 
 	fmt.Printf("TestServerInterceptor =======> end \n")
-
 	if err != nil {
 		return nil, err
 	}
