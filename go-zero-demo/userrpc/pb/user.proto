@@ -14,7 +14,7 @@ message GetUserInfoReq {
 // 定义响应体
 message GetUserInfoResp {
   int64 id = 1;
-  int64 name = 2;
+  string name = 2;
 }
 
 // 定义 UserInfo 服务

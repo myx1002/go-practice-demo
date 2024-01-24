@@ -25,7 +25,15 @@ func NewGetUserInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetUs
 
 // 定义一个 UserInfo 一元 rpc 方法，请求体和响应体必填。
 func (l *GetUserInfoLogic) GetUserInfo(in *pb.GetUserInfoReq) (*pb.GetUserInfoResp, error) {
-	// todo: add your logic here and delete this line
+	users := map[int64]string{
+		1: "小明 form rpc",
+		2: "小李 form rpc",
+		3: "小贝 form rpc",
+	}
 
-	return &pb.GetUserInfoResp{}, nil
+	userName := "unknown form rpc"
+	if name, ok := users[in.Id]; ok {
+		userName = name
+	}
+	return &pb.GetUserInfoResp{Id: in.Id, Name: userName}, nil
 }

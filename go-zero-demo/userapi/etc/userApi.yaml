@@ -5,6 +5,12 @@ Port: 8888
 DB:
   DataSource: root:941002@tcp(192.168.1.166:3306)/bubble?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
 
+OrderRpcConf:
+  Etcd:
+    Hosts:
+    - 127.0.0.1:2379
+    Key: order.rpc
+
 # https://go-zero.dev/docs/tutorials/go-zero/configuration/log
 Log:
   ServiceName: user_api

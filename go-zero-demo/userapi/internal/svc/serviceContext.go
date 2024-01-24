@@ -3,7 +3,9 @@ package svc
 import (
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 	"github.com/zeromicro/go-zero/rest"
+	"github.com/zeromicro/go-zero/zrpc"
 
+	"go-zero-demo/orderrpc/orderinfo"
 	"go-zero-demo/userapi/internal/config"
 	"go-zero-demo/userapi/internal/middleware"
 	"go-zero-demo/userapi/model"
@@ -15,6 +17,7 @@ type ServiceContext struct {
 	TestMiddleware rest.Middleware
 	UserModel      model.UserModel
 	UserDataModel  model.UserDataModel
+	OrderRpcClient orderinfo.OrderInfo // rpc客户端
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -25,5 +28,6 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		TestMiddleware: middleware.NewTestMiddleware().Handle,
 		UserModel:      model.NewUserModel(sqlConn, c.Cache),
 		UserDataModel:  model.NewUserDataModel(sqlConn, c.Cache),
+		OrderRpcClient: orderinfo.NewOrderInfo(zrpc.MustNewClient(c.OrderRpcConf)), // 引入rpc客户端到service上下文
 	}
 }

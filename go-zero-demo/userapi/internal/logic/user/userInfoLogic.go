@@ -2,13 +2,12 @@ package user
 
 import (
 	"context"
-	"errors"
 
 	"github.com/zeromicro/go-zero/core/logx"
 
+	"go-zero-demo/orderrpc/order_pb"
 	"go-zero-demo/userapi/internal/svc"
 	"go-zero-demo/userapi/internal/types"
-	"go-zero-demo/userapi/model"
 )
 
 type UserInfoLogic struct {
@@ -26,13 +25,10 @@ func NewUserInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UserInfo
 }
 
 func (l *UserInfoLogic) UserInfo(req *types.UserInfoReq) (resp *types.UserInfoResp, err error) {
-	user, err := l.svcCtx.UserModel.FindOne(l.ctx, req.UserId)
-	if err != nil && err != model.ErrNotFound {
-		return nil, errors.New("查询数据失败！")
-	}
-	if user == nil {
-		return nil, errors.New("该用户不存在！")
+	user, err := l.svcCtx.OrderRpcClient.GetOrderInfo(l.ctx, &order_pb.GetOrderInfoReq{Id: 1})
+	if err != nil {
+		return nil, err
 	}
 
-	return &types.UserInfoResp{UserId: req.UserId, Name: user.Name}, nil
+	return &types.UserInfoResp{UserId: user.Id, Name: user.Name}, nil
 }
