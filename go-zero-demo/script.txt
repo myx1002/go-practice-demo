@@ -2,4 +2,4 @@
 goctl api go -api xxx.api -dir ../ --style=goZero
 
 # 生成rpc业务代码，需要进入到对应的rpc目录下执行
-goctl rpc protoc xxx.proto --go_out=../ --go-grpc_out=../ --zrpc_out=../ --style=goZero
+goctl rpc protoc xxx.proto --go_out=../ --go-grpc_out=../ --zrpc_out=../ --style=goZero --home=../../tpl

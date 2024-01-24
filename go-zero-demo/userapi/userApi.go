@@ -33,6 +33,7 @@ func main() {
 	server.Use(middleware.NewGlobalTestMiddleware().Handle)
 
 	// 初始化上下文context，把一些配置加载到context中，例如上面的配置，还有Kafka、Redis等等可以引入
+	// 还要把对应的model和rpcClient注册进service里面
 	ctx := svc.NewServiceContext(c)
 
 	// 路由注册

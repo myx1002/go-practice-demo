@@ -27,6 +27,8 @@ var (
 type (
 	userModel interface {
 		Insert(ctx context.Context, data *User) (sql.Result, error)
+		TransInsert(ctx context.Context, session sqlx.Session, data *User) (sql.Result, error)
+
 		FindOne(ctx context.Context, userId int64) (*User, error)
 		Update(ctx context.Context, data *User) error
 		Delete(ctx context.Context, userId int64) error
@@ -78,6 +80,7 @@ func (m *defaultUserModel) FindOne(ctx context.Context, userId int64) (*User, er
 
 func (m *defaultUserModel) Insert(ctx context.Context, data *User) (sql.Result, error) {
 	bubbleUserUserIdKey := fmt.Sprintf("%s%v", cacheBubbleUserUserIdPrefix, data.UserId)
+	// from tpl
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("insert into %s (%s) values (?)", m.table, userRowsExpectAutoSet)
 		return conn.ExecCtx(ctx, query, data.Name)
@@ -85,6 +88,14 @@ func (m *defaultUserModel) Insert(ctx context.Context, data *User) (sql.Result, 
 	return ret, err
 }
 
+func (m *defaultUserModel) TransInsert(ctx context.Context, session sqlx.Session, data *User) (sql.Result, error) {
+	bubbleUserUserIdKey := fmt.Sprintf("%s%v", cacheBubbleUserUserIdPrefix, data.UserId)
+	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+		query := fmt.Sprintf("insert into %s (%s) values (?)", m.table, userRowsExpectAutoSet)
+		return session.ExecCtx(ctx, query, data.Name)
+	}, bubbleUserUserIdKey)
+	return ret, err
+}
 
 func (m *defaultUserModel) Update(ctx context.Context, data *User) error {
 	bubbleUserUserIdKey := fmt.Sprintf("%s%v", cacheBubbleUserUserIdPrefix, data.UserId)
@@ -94,9 +105,6 @@ func (m *defaultUserModel) Update(ctx context.Context, data *User) error {
 	}, bubbleUserUserIdKey)
 	return err
 }
-
-
-
 
 func (m *defaultUserModel) formatPrimary(primary any) string {
 	return fmt.Sprintf("%s%v", cacheBubbleUserUserIdPrefix, primary)

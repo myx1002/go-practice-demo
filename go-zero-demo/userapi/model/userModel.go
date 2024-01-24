@@ -2,8 +2,6 @@ package model
 
 import (
 	"context"
-	"database/sql"
-	"fmt"
 
 	"github.com/zeromicro/go-zero/core/stores/cache"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
@@ -16,7 +14,6 @@ type (
 	// and implement the added methods in customUserModel.
 	UserModel interface {
 		userModel
-		TransInsert(ctx context.Context, session sqlx.Session, data *User) (sql.Result, error)
 		TransCtx(ctx context.Context, fn func(ctx context.Context, session sqlx.Session) error) error
 	}
 
@@ -24,15 +21,6 @@ type (
 		*defaultUserModel
 	}
 )
-
-func (m *defaultUserModel) TransInsert(ctx context.Context, session sqlx.Session, data *User) (sql.Result, error) {
-	bubbleUserUserIdKey := fmt.Sprintf("%s%v", cacheBubbleUserUserIdPrefix, data.UserId)
-	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?)", m.table, userRowsExpectAutoSet)
-		return session.ExecCtx(ctx, query, data.Name)
-	}, bubbleUserUserIdKey)
-	return ret, err
-}
 
 func (m *defaultUserModel) TransCtx(ctx context.Context, fn func(ctx context.Context, session sqlx.Session) error) error {
 	return m.TransactCtx(ctx, func(ctx context.Context, session sqlx.Session) error {
