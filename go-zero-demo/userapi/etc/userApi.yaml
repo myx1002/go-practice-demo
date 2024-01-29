@@ -1,14 +1,18 @@
 Name: user_api
 Host: 0.0.0.0
-Port: 8888
+Port: 8889
 
 DB:
   DataSource: root:941002@tcp(192.168.1.166:3306)/bubble?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
 
+Auth:
+  AccessSecret: 83159c88-d419-4c05-a8cb-c7d022f6245d
+  AccessExpire: 3600
+
 OrderRpcConf:
   Etcd:
     Hosts:
-    - 127.0.0.1:2379
+      - 127.0.0.1:2379
     Key: order.rpc
 #  Endpoints:
 #    - 127.0.0.1:8081 #填写服务端端口
