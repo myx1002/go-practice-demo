@@ -44,10 +44,37 @@ type (
 	}
 )
 
+// 用户注册
+type (
+	UserRegisterReq {
+		Phone    string `json:"phone"`
+		Password string `json:"password"`
+	}
+	UserRegisterResp {
+		AccessToken  string `json:"accessToken"`
+		AccessExpire int64  `json:"accessExpire"`
+		RefreshAfter int64  `json:"refreshAfter"`
+	}
+)
+
 @server (
 	group:      user // api组
 	prefix:     userapi/v1 // 路由组
 	middleware: TestMiddleware // 通过goctl api go自动生成中间件文件
+)
+// 定义 HTTP 服务
+// 微服务名称为 user_api，生成的代码目录和配置文件将和 user_api 值相关
+service user_api {
+	@doc "注册用户信息"
+	@handler UserRegister
+	post /user/register (UserRegisterReq) returns (UserRegisterResp)
+}
+
+@server (
+	group:      user // api组
+	prefix:     userapi/v1 // 路由组
+	middleware: TestMiddleware // 通过goctl api go自动生成中间件文件
+	jwt:        Auth // 开启jwt鉴权
 )
 // 定义 HTTP 服务
 // 微服务名称为 user_api，生成的代码目录和配置文件将和 user_api 值相关

@@ -28,7 +28,8 @@ func NewUserInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UserInfo
 
 func (l *UserInfoLogic) UserInfo(req *types.UserInfoReq) (resp *types.UserInfoResp, err error) {
 
-	fmt.Println("get UserInfo....")
+	// 获取jwt解析出来的user_phone
+	fmt.Println("get UserInfo....", l.ctx.Value("user_phone"))
 	user, err := l.svcCtx.OrderRpcClient.GetOrderInfo(l.ctx, &order_pb.GetOrderInfoReq{Id: req.UserId})
 
 	if err != nil || err == model.ErrNotFound {

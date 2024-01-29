@@ -18,6 +18,17 @@ type UserInfoResp struct {
 	Name   string `json:"name"`
 }
 
+type UserRegisterReq struct {
+	Phone    string `json:"phone"`
+	Password string `json:"password"`
+}
+
+type UserRegisterResp struct {
+	AccessToken  string `json:"accessToken"`
+	AccessExpire int64  `json:"accessExpire"`
+	RefreshAfter int64  `json:"refreshAfter"`
+}
+
 type UserUpdateReq struct {
 	UserId int64  `json:"user_id"`
 	Name   string `json:"name"`

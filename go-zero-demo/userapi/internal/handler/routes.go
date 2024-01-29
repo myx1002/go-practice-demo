@@ -17,6 +17,20 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			[]rest.Route{
 				{
 					Method:  http.MethodPost,
+					Path:    "/user/register",
+					Handler: user.UserRegisterHandler(serverCtx),
+				},
+			}...,
+		),
+		rest.WithPrefix("/userapi/v1"),
+	)
+
+	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.TestMiddleware},
+			[]rest.Route{
+				{
+					Method:  http.MethodPost,
 					Path:    "/user/create",
 					Handler: user.UserCreateHandler(serverCtx),
 				},
@@ -32,6 +46,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				},
 			}...,
 		),
+		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 		rest.WithPrefix("/userapi/v1"),
 	)
 }
