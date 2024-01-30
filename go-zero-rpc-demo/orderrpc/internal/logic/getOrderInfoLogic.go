@@ -19,6 +19,11 @@ type GetOrderInfoLogic struct {
 	logx.Logger
 }
 
+type DeferQueueDemoPayload struct {
+	TaskTime string
+	TaskId   int64
+}
+
 func NewGetOrderInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetOrderInfoLogic {
 	return &GetOrderInfoLogic{
 		ctx:    ctx,

@@ -2,10 +2,10 @@ Name: order.rpc
 ListenOn: 0.0.0.0:8081
 Mode: dev
 
-Etcd:
-  Hosts:
-  - 0.0.0.0:2379
-  Key: order.rpc
+#Etcd:
+#  Hosts:
+#  - 0.0.0.0:2379
+#  Key: order.rpc
 
 DB:
   DataSource: root:941002@tcp(192.168.1.166:3306)/bubble?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
@@ -13,3 +13,9 @@ DB:
 Cache:
   - Host: 192.168.1.166:6379
     Pass: '941002'
+
+Redis:
+  Host: 192.168.1.166:6379
+  Type: node
+  Pass: '941002'
+  Key: 'demo_order_rpc'
