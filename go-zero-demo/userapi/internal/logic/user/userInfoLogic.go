@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/logx"
 
 	"go-zero-demo/orderrpc/order_pb"
@@ -33,7 +34,7 @@ func (l *UserInfoLogic) UserInfo(req *types.UserInfoReq) (resp *types.UserInfoRe
 	user, err := l.svcCtx.OrderRpcClient.GetOrderInfo(l.ctx, &order_pb.GetOrderInfoReq{Id: req.UserId})
 
 	if err != nil || err == model.ErrNotFound {
-		return &types.UserInfoResp{UserId: 0, Name: "unknown"}, err
+		return nil, errors.Wrapf(err, "req: %+v", req)
 	}
 
 	return &types.UserInfoResp{UserId: user.Id, Name: user.Name}, nil

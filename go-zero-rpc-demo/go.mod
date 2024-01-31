@@ -4,6 +4,7 @@ go 1.21.3
 
 require (
 	github.com/hibiken/asynq v0.24.1
+	github.com/pkg/errors v0.9.1
 	github.com/zeromicro/go-zero v1.6.1
 	google.golang.org/grpc v1.60.1
 	google.golang.org/protobuf v1.32.0
