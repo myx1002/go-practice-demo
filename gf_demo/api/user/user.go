@@ -1,26 +1,13 @@
 package user
 
-import "github.com/gogf/gf/v2/net/ghttp"
+import "github.com/gogf/gf/v2/frame/g"
 
-type User struct {
+type UserDetailReq struct {
+	g.Meta `path:"/user/detail" method:"get" tags:"User" summary:"获取用户详情"`
+	Id     int `json:"id"`
 }
 
-func New() *User {
-	return &User{}
-}
-
-func (u *User) Add(req *ghttp.Request) {
-	req.Response.Write("添加用户!")
-}
-
-func (u *User) Update(req *ghttp.Request) {
-	req.Response.Write("更新用户!")
-}
-
-func (u *User) Delete(req *ghttp.Request) {
-	req.Response.Write("删除用户!")
-}
-
-func (u *User) Get(req *ghttp.Request) {
-	req.Response.Write("查询一个用户!")
+type UserDetailRes struct {
+	Name string `json:"name"`
+	Age  int    `json:"age"`
 }
