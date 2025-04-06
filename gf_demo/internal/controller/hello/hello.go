@@ -27,11 +27,37 @@ func (h *Hello) SayHello(req *ghttp.Request) {
  */
 func (h *Hello) Params(ctx context.Context, req *hello.ParamsReq) (res *hello.ParamsRes, err error) {
 	r := g.RequestFromCtx(ctx)
-	//name := r.GetQuery("name", "李四") // 获取路由的name参数，并设置默认值
-	//data := r.GetQueryMap(g.Map{"name": "李四", "age": 20}) // 通过Map的方式获取指定的参数，并设置默认值
+
+	/**
+	 * 获取GET请求参数
+	 */
+	// 获取路由的name参数，并设置默认值
+	//name := r.GetQuery("name", "李四")
+	// 通过Map的方式获取指定的参数，并设置默认值
+	//data := r.GetQueryMap(g.Map{"name": "李四", "age": 20})
+	// 通过Map的方式获取指定的参数，不指定值的话则是获取所有值
+	//data := r.GetQueryMap()
 	//r.Response.Writeln(data)
 
-	data := r.GetQueryMap() // 通过Map的方式获取指定的参数，不指定值的话则是获取所有值
-	r.Response.Writeln(data)
+	/**
+	 * 获取POST请求参数
+	 */
+	// 指定字段获取
+	//name := r.GetForm("name", "李四")
+	// 直接获取所有值
+	//data := r.GetFormMap()
+	//r.Response.Writeln(data)
+
+	// 根据对象来获取值
+	type UserInfo struct {
+		Name     string `json:"name"`
+		Age      int    `json:"age"`
+		Password string `json:"password"`
+	}
+	var userInfo UserInfo
+	err = r.Parse(&userInfo)
+	if err == nil {
+		r.Response.Writeln(userInfo)
+	}
 	return
 }
