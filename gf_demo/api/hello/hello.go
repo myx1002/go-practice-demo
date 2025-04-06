@@ -7,7 +7,7 @@ package hello
 import "github.com/gogf/gf/v2/frame/g"
 
 type ParamsReq struct {
-	g.Meta `path:"/hello/params" method:"all" tags:"Hello" summary:"Hello Params"`
+	g.Meta `path:"/hello/{version}/params" method:"all" tags:"Hello" summary:"Hello Params"`
 }
 
 type ParamsRes struct {
