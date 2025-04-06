@@ -43,8 +43,8 @@ func (h *Hello) Params(ctx context.Context, req *hello.ParamsReq) (res *hello.Pa
 	 * 动态路由参数获取
 	 */
 	//routeParam := r.GetRouter("version")
-	routeParam := r.GetRouterMap()
-	r.Response.Writeln(routeParam)
+	//routeParam := r.GetRouterMap()
+	//r.Response.Writeln(routeParam)
 
 	/**
 	 * 获取POST请求参数
@@ -56,26 +56,31 @@ func (h *Hello) Params(ctx context.Context, req *hello.ParamsReq) (res *hello.Pa
 	//r.Response.Writeln(data)
 
 	// 根据对象来获取值
-	type UserInfo struct {
-		Name     string `json:"name"`
-		Age      int    `json:"age"`
-		Password string `json:"password"`
-		Version  string `json:"version"`
-	}
-	var userInfo UserInfo
-	err = r.ParseForm(&userInfo) // 只获取post参数的
-	if err == nil {
-		r.Response.Writeln(userInfo)
-	}
+	//type UserInfo struct {
+	//	Name     string `json:"name"`
+	//	Age      int    `json:"age"`
+	//	Password string `json:"password"`
+	//	Version  string `json:"version"`
+	//}
+	//var userInfo UserInfo
+	//err = r.ParseForm(&userInfo) // 只获取post参数的
+	//if err == nil {
+	//	r.Response.Writeln(userInfo)
+	//}
 
 	/**
 	 * 获取所有参数
 	 */
-	data := r.GetMap()
-	r.Response.Writeln(data)
-	err = r.Parse(&userInfo) // 获取所有参数的
-	if err == nil {
-		r.Response.Writeln(userInfo)
-	}
+	//data := r.GetMap()
+	//r.Response.Writeln(data)
+	//err = r.Parse(&userInfo) // 获取所有参数的
+	//if err == nil {
+	//	r.Response.Writeln(userInfo)
+	//}
+
+	/**
+	 * 直接读取req的参数
+	 */
+	r.Response.Writeln(req)
 	return
 }
