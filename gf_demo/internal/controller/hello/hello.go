@@ -4,7 +4,12 @@
 
 package hello
 
-import "github.com/gogf/gf/v2/net/ghttp"
+import (
+	"gf_demo/api/hello"
+	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/net/ghttp"
+	"golang.org/x/net/context"
+)
 
 type Hello struct {
 }
@@ -15,4 +20,18 @@ func NewHello() *Hello {
 
 func (h *Hello) SayHello(req *ghttp.Request) {
 	req.Response.Writeln("你好你好呀")
+}
+
+/**
+ * 获取GET请求参数
+ */
+func (h *Hello) Params(ctx context.Context, req *hello.ParamsReq) (res *hello.ParamsRes, err error) {
+	r := g.RequestFromCtx(ctx)
+	//name := r.GetQuery("name", "李四") // 获取路由的name参数，并设置默认值
+	//data := r.GetQueryMap(g.Map{"name": "李四", "age": 20}) // 通过Map的方式获取指定的参数，并设置默认值
+	//r.Response.Writeln(data)
+
+	data := r.GetQueryMap() // 通过Map的方式获取指定的参数，不指定值的话则是获取所有值
+	r.Response.Writeln(data)
+	return
 }

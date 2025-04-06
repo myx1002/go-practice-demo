@@ -4,12 +4,11 @@
 
 package hello
 
-import (
-	"context"
+import "github.com/gogf/gf/v2/frame/g"
 
-	"gf_demo/api/hello/v1"
-)
+type ParamsReq struct {
+	g.Meta `path:"/hello/params" method:"get" tags:"Hello" summary:"Hello Params"`
+}
 
-type IHelloV1 interface {
-	Hello(ctx context.Context, req *v1.HelloReq) (res *v1.HelloRes, err error)
+type ParamsRes struct {
 }
