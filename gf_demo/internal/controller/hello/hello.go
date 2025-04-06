@@ -6,6 +6,7 @@ package hello
 
 import (
 	"gf_demo/api/hello"
+	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
 	"golang.org/x/net/context"
@@ -20,6 +21,16 @@ func NewHello() *Hello {
 
 func (h *Hello) SayHello(req *ghttp.Request) {
 	req.Response.Writeln("你好你好呀")
+}
+
+func (h *Hello) Respons(ctx context.Context, req *hello.ResponsReq) (res *hello.ParamsRes, err error) {
+	res = &hello.ParamsRes{
+		Age:      20,
+		UserName: "力宝宝",
+		Password: "123456",
+	}
+	err = gerror.New("服务器开小差")
+	return
 }
 
 /**
