@@ -458,3 +458,10 @@ func (h *Hello) Upload(req *ghttp.Request) {
 func (h *Hello) Download(req *ghttp.Request) {
 	req.Response.ServeFileDownload("resource/public/upload/123.png")
 }
+
+/**
+ * 参数校验：https://goframe.org/docs/core/gvalid-rules
+ */
+func (h *Hello) Valida(ctx context.Context, req *hello.ValidateReq) (res *hello.ValidateRes, err error) {
+	return
+}
