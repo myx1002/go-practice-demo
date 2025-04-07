@@ -453,5 +453,8 @@ func (h *Hello) Upload(req *ghttp.Request) {
 			req.Response.Writeln(fileNames)
 		}
 	}
+}
 
+func (h *Hello) Download(req *ghttp.Request) {
+	req.Response.ServeFileDownload("resource/public/upload/123.png")
 }
