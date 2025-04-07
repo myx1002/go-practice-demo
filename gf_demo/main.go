@@ -1,6 +1,7 @@
 package main
 
 import (
+	_ "gf_demo/internal/logic"
 	_ "gf_demo/internal/packed"
 	_ "github.com/gogf/gf/contrib/drivers/mysql/v2"
 

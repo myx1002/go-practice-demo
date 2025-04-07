@@ -8,13 +8,12 @@ import (
 	"gf_demo/api/hello"
 	"gf_demo/internal/dao"
 	"gf_demo/internal/model/do"
+	"gf_demo/internal/service"
 	"github.com/gogf/gf/v2/database/gdb"
 	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
 	"github.com/gogf/gf/v2/os/gtime"
-	"github.com/gogf/gf/v2/text/gstr"
-	"github.com/gogf/gf/v2/util/gconv"
 	"golang.org/x/net/context"
 )
 
@@ -30,141 +29,145 @@ func NewHello() *Hello {
  * https://goframe.org/docs/core/gdb-chaining-query-where
  */
 func (h *Hello) SelectData(req *ghttp.Request) {
-	/**
-	 * 查询数据 One/All/Count/Value/Array/Fields
-	 */
-	// 查询一条数据
-	md := g.Model("book")
-	bk, err := md.Fields("name", "price").One()
-	if err == nil {
-		req.Response.WriteJson(bk)
-		req.Response.Writeln()
-	}
+	///**
+	// * 查询数据 One/All/Count/Value/Array/Fields
+	// */
+	//// 查询一条数据
+	//md := g.Model("book")
+	//bk, err := md.Fields("name", "price").One()
+	//if err == nil {
+	//	req.Response.WriteJson(bk)
+	//	req.Response.Writeln()
+	//}
+	//
+	//// 查询多条数据
+	//bkAll, err := md.All()
+	//if err == nil {
+	//	for _, v := range bkAll {
+	//		req.Response.Writeln(v)
+	//	}
+	//}
+	//
+	//// 查询数据量
+	//md = g.Model("book")
+	//count, err := md.Count()
+	//if err == nil {
+	//	req.Response.Writeln(count)
+	//}
+	//
+	//// 查询一条数据指定字段
+	//name, err := md.Value("name")
+	//if err == nil {
+	//	req.Response.Writeln(name)
+	//}
+	//
+	//// 查询指定列数据
+	//names, err := md.Group("name").Array("name")
+	//if err == nil {
+	//	req.Response.WriteJson(names)
+	//	req.Response.Writeln()
+	//}
+	//
+	///**
+	// * Max/Min/Sum/Avg
+	// */
+	//maxPrice, err := g.Model("book").Max("price")
+	//minPrice, err := g.Model("book").Min("price")
+	//sumPrice, err := g.Model("book").Sum("price")
+	//avgPrice, err := g.Model("book").Avg("price")
+	//if err == nil {
+	//	req.Response.Writeln(maxPrice)
+	//	req.Response.Writeln(minPrice)
+	//	req.Response.Writeln(sumPrice)
+	//	// avgPrice保留两位小数
+	//	req.Response.Writeln(gstr.NumberFormat(gconv.Float64(avgPrice), 2, ".", ","))
+	//}
+	//
+	///**
+	// * Where/WhereOr
+	// */
+	//books, err := g.Model("book").WhereIn("id", g.Array{1, 2, 3}).WhereLike("name", "%数据%").All()
+	//if err == nil {
+	//	req.Response.WriteJson(books)
+	//	req.Response.Writeln()
+	//}
+	//
+	//md = g.Model("book")
+	//books, err = md.
+	//	WhereIn("id", g.Array{1, 2, 3}).
+	//	Where(md.Builder().WhereLike("name", "%原理%").WhereOrLike("name", "%设计%")).
+	//	All()
+	//if err == nil {
+	//	req.Response.WriteJson(books)
+	//	req.Response.Writeln()
+	//}
+	//
+	///**
+	// * Group/Order
+	// */
+	//md = g.Model("book")
+	//books, err = md.
+	//	Fields("name").
+	//	Group("name").All()
+	//if err == nil {
+	//	req.Response.WriteJson(books)
+	//	req.Response.Writeln()
+	//}
+	//
+	//md = g.Model("book")
+	//books, err = md.OrderDesc("price").OrderAsc("id").All()
+	//if err == nil {
+	//	req.Response.WriteJson(books)
+	//	req.Response.Writeln()
+	//}
+	//
+	///**
+	// * Scan
+	// * Scan方法可以将查询到的数据转为自定义结构体或结构体数组。
+	// * Scan会将数据库字段下划线命名对应到结构体中相应的驼峰命名上，如果对应不上，则该成员为nil或者零值。如果结构体中成员名称与数据表中字段不对应，可以用orm:标签来指定对应字段
+	// */
+	//type Book struct {
+	//	BookId     uint        `orm:"id"  `
+	//	BookName   string      `orm:"name"`
+	//	BookAuthor string      `orm:"author"`
+	//	BookPrice  float64     `orm:"price"`
+	//	PubTime    *gtime.Time `orm:"publish_time"`
+	//}
+	//// 单个结构体
+	//req.Response.WriteJson("单个结构体:")
+	//var singleBook *Book
+	//md = g.Model("book")
+	//err = md.Scan(&singleBook)
+	//if err == nil {
+	//	req.Response.WriteJson(singleBook)
+	//	req.Response.Writeln()
+	//}
+	//
+	//// 结构体数组
+	//req.Response.WriteJson("结构体数组:")
+	//var multiBooks []*Book
+	//err = md.Scan(&multiBooks)
+	//if err == nil {
+	//	req.Response.WriteJson(multiBooks)
+	//	req.Response.Writeln()
+	//}
+	//
+	///**
+	// * 分页
+	// */
+	//req.Response.WriteJson("分页:")
+	//md = g.Model("book")
+	//all, count, err := md.Fields("name", "price").WhereGT("id", 1).Limit(0, 2).AllAndCount(false)
+	//if err == nil {
+	//	req.Response.WriteJson(all)
+	//	req.Response.Writeln(count)
+	//}
 
-	// 查询多条数据
-	bkAll, err := md.All()
+	// 通过service获取数据
+	serviceBooks, err := service.Book().GetList(req.Context())
 	if err == nil {
-		for _, v := range bkAll {
-			req.Response.Writeln(v)
-		}
+		req.Response.WriteJson(serviceBooks)
 	}
-
-	// 查询数据量
-	md = g.Model("book")
-	count, err := md.Count()
-	if err == nil {
-		req.Response.Writeln(count)
-	}
-
-	// 查询一条数据指定字段
-	name, err := md.Value("name")
-	if err == nil {
-		req.Response.Writeln(name)
-	}
-
-	// 查询指定列数据
-	names, err := md.Group("name").Array("name")
-	if err == nil {
-		req.Response.WriteJson(names)
-		req.Response.Writeln()
-	}
-
-	/**
-	 * Max/Min/Sum/Avg
-	 */
-	maxPrice, err := g.Model("book").Max("price")
-	minPrice, err := g.Model("book").Min("price")
-	sumPrice, err := g.Model("book").Sum("price")
-	avgPrice, err := g.Model("book").Avg("price")
-	if err == nil {
-		req.Response.Writeln(maxPrice)
-		req.Response.Writeln(minPrice)
-		req.Response.Writeln(sumPrice)
-		// avgPrice保留两位小数
-		req.Response.Writeln(gstr.NumberFormat(gconv.Float64(avgPrice), 2, ".", ","))
-	}
-
-	/**
-	 * Where/WhereOr
-	 */
-	books, err := g.Model("book").WhereIn("id", g.Array{1, 2, 3}).WhereLike("name", "%数据%").All()
-	if err == nil {
-		req.Response.WriteJson(books)
-		req.Response.Writeln()
-	}
-
-	md = g.Model("book")
-	books, err = md.
-		WhereIn("id", g.Array{1, 2, 3}).
-		Where(md.Builder().WhereLike("name", "%原理%").WhereOrLike("name", "%设计%")).
-		All()
-	if err == nil {
-		req.Response.WriteJson(books)
-		req.Response.Writeln()
-	}
-
-	/**
-	 * Group/Order
-	 */
-	md = g.Model("book")
-	books, err = md.
-		Fields("name").
-		Group("name").All()
-	if err == nil {
-		req.Response.WriteJson(books)
-		req.Response.Writeln()
-	}
-
-	md = g.Model("book")
-	books, err = md.OrderDesc("price").OrderAsc("id").All()
-	if err == nil {
-		req.Response.WriteJson(books)
-		req.Response.Writeln()
-	}
-
-	/**
-	 * Scan
-	 * Scan方法可以将查询到的数据转为自定义结构体或结构体数组。
-	 * Scan会将数据库字段下划线命名对应到结构体中相应的驼峰命名上，如果对应不上，则该成员为nil或者零值。如果结构体中成员名称与数据表中字段不对应，可以用orm:标签来指定对应字段
-	 */
-	type Book struct {
-		BookId     uint        `orm:"id"  `
-		BookName   string      `orm:"name"`
-		BookAuthor string      `orm:"author"`
-		BookPrice  float64     `orm:"price"`
-		PubTime    *gtime.Time `orm:"publish_time"`
-	}
-	// 单个结构体
-	req.Response.WriteJson("单个结构体:")
-	var singleBook *Book
-	md = g.Model("book")
-	err = md.Scan(&singleBook)
-	if err == nil {
-		req.Response.WriteJson(singleBook)
-		req.Response.Writeln()
-	}
-
-	// 结构体数组
-	req.Response.WriteJson("结构体数组:")
-	var multiBooks []*Book
-	err = md.Scan(&multiBooks)
-	if err == nil {
-		req.Response.WriteJson(multiBooks)
-		req.Response.Writeln()
-	}
-
-	/**
-	 * 分页
-	 */
-	req.Response.WriteJson("分页:")
-	md = g.Model("book")
-	all, count, err := md.Fields("name", "price").WhereGT("id", 1).Limit(0, 2).AllAndCount(false)
-	if err == nil {
-		req.Response.WriteJson(all)
-		req.Response.Writeln(count)
-	}
-
-	req.Response.Writeln("你好你好呀")
 }
 
 /**
@@ -358,7 +361,6 @@ func (h *Hello) RelationSelect(req *ghttp.Request) {
 		req.Response.Writeln("部门信息：")
 		req.Response.WriteJson(depts)
 	}
-
 }
 
 func (h *Hello) Respons(ctx context.Context, req *hello.ResponsReq) (res *hello.ParamsRes, err error) {
