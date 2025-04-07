@@ -301,6 +301,66 @@ func (h *Hello) TransactionData(req *ghttp.Request) {
 	dao.Book.Ctx(context.TODO()).Where("id", 10).Data(bookStruct).Update()
 }
 
+/**
+ * 关联查询
+ * https://goframe.org/docs/core/gdb-chaining-relation
+ */
+func (h *Hello) RelationSelect(req *ghttp.Request) {
+	// 一对一查询：员工列表，每个员工都有一个爱好和对应一个部门
+	type MyDept struct {
+		g.Meta `orm:"table:dept"`
+		Id     uint   `json:"id"     ` // ID
+		Name   string `json:"name"   ` // 部门名称
+		Leader string `json:"leader" ` // 部门领导
+		Phone  string `json:"phone"  ` // 联系电话
+	}
+	type Hobby struct {
+		g.Meta `orm:"table:hobby"`
+		Id     uint   `json:"id"     ` // ID
+		EmpId  uint   `json:"emp_id" ` // 员工ID
+		Name   string `json:"name"   ` // 爱好名称
+	}
+	type MyEmp struct {
+		g.Meta `orm:"table:emp"`
+		Id     uint   `json:"id"      ` // ID
+		DeptId uint   `json:"dept_id" ` // 所属部门
+		Name   string `json:"name"    ` // 姓名
+		Gender int    `json:"gender"  ` // 性别: 0=男 1=女
+		Phone  string `json:"phone"   ` // 联系电话
+		Email  string `json:"email"   ` // 邮箱
+		Avatar string `json:"avatar"  ` // 照片
+
+		Dept  *MyDept `orm:"with:id=dept_id" json:"dept"`
+		Hobby *Hobby  `orm:"with:emp_id=id" json:"hobby"`
+	}
+
+	var emps []*MyEmp
+	err := dao.Emp.Ctx(context.TODO()).WithAll().Scan(&emps)
+	if err == nil {
+		req.Response.Writeln("员工信息：")
+		req.Response.WriteJson(emps)
+	}
+
+	// 一对多查询：部门列表，一个部门有多个员工
+	type Dept struct {
+		Id     uint   `json:"id"     ` // ID
+		Pid    uint   `json:"pid"    ` // 上级部门ID
+		Name   string `json:"name"   ` // 部门名称
+		Leader string `json:"leader" ` // 部门领导
+		Phone  string `json:"phone"  ` // 联系电话
+
+		Emps []*MyEmp `orm:"with:dept_id=id" json:"emps"`
+	}
+
+	var depts []*Dept
+	err = dao.Dept.Ctx(context.TODO()).With(MyEmp{}).Scan(&depts)
+	if err == nil {
+		req.Response.Writeln("部门信息：")
+		req.Response.WriteJson(depts)
+	}
+
+}
+
 func (h *Hello) Respons(ctx context.Context, req *hello.ResponsReq) (res *hello.ParamsRes, err error) {
 	res = &hello.ParamsRes{
 		Age:      20,
