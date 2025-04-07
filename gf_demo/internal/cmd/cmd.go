@@ -16,6 +16,7 @@ var (
 		Brief: "start http server",
 		Func: func(ctx context.Context, parser *gcmd.Parser) (err error) {
 			s := g.Server()
+			s.SetPort(8881)
 
 			// 分组路由
 			//s.Group("/hello", func(group *ghttp.RouterGroup) {
