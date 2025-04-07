@@ -435,3 +435,23 @@ func (h *Hello) Params(ctx context.Context, req *hello.ParamsReq) (res *hello.Pa
 	r.Response.Writeln(req)
 	return
 }
+
+func (h *Hello) Upload(req *ghttp.Request) {
+	file := req.GetUploadFile("file")
+	if file != nil {
+		file.Filename = "123.png"
+		fileName, err := file.Save("resource/public/upload")
+		if err == nil {
+			req.Response.Writeln(fileName)
+		}
+	}
+
+	files := req.GetUploadFiles("files")
+	if files != nil {
+		fileNames, err := files.Save("resource/public/upload")
+		if err == nil {
+			req.Response.Writeln(fileNames)
+		}
+	}
+
+}

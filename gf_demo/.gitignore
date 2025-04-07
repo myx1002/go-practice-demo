@@ -6,6 +6,7 @@
 .idea/
 .settings/
 .vscode/
+resource/public/upload/
 bin/
 **/.DS_Store
 gf

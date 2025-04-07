@@ -17,6 +17,8 @@ var (
 		Func: func(ctx context.Context, parser *gcmd.Parser) (err error) {
 			s := g.Server()
 			s.SetPort(8881)
+			// 开启静态资源访问
+			s.SetServerRoot("resource/public")
 
 			// 分组路由
 			//s.Group("/hello", func(group *ghttp.RouterGroup) {
@@ -57,6 +59,7 @@ var (
 					user.New(),
 				)
 			})
+
 			s.Run()
 			return nil
 		},
