@@ -6,6 +6,8 @@ package hello
 
 import (
 	"gf_demo/api/hello"
+	"gf_demo/internal/dao"
+	"gf_demo/internal/model/do"
 	"github.com/gogf/gf/v2/database/gdb"
 	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/frame/g"
@@ -246,6 +248,57 @@ func (h *Hello) UpdateData(req *ghttp.Request) {
 	//用来给指定字段增加/减少指定值
 	g.Model("book").WhereBetween("id", 7, 8).Increment("price", 2.5)
 	g.Model("book").WhereBetween("id", 9, 10).Decrement("price", 1.5)
+}
+
+/**
+ * 事务
+ * https://goframe.org/docs/core/gdb-transaction
+ */
+func (h *Hello) TransactionData(req *ghttp.Request) {
+	data := g.Map{
+		"id":           11,
+		"name":         "Linux驱动开发入门与实践",
+		"author":       "郑强",
+		"price":        45,
+		"publish_time": gdb.Raw("now()"),
+	}
+
+	g.DB().Transaction(context.TODO(), func(ctx context.Context, tx gdb.TX) error {
+		_, err := tx.Model("book").Ctx(ctx).Save(data)
+		return err
+	})
+
+	// dao使用
+	books, err := dao.Book.Ctx(context.TODO()).WhereGT("id", 3).WhereLT("id", 6).All()
+	if err == nil {
+		req.Response.WriteJson(books)
+	}
+
+	// dao字段过滤-会过滤nil值
+	book := do.Book{
+		Name:        "Linux驱动开发入门与实践1",
+		Price:       0,
+		PublishTime: nil,
+	}
+
+	dao.Book.Ctx(context.TODO()).Where("id", 11).Data(book).Update()
+
+	// dao字段过滤-通过对象处理，可以设置nil值，但是如果不设置，就会把字段置空
+	type Book struct {
+		Id      uint
+		Name    string
+		Author  string
+		Price   float64
+		PubTime *gtime.Time `orm:"publish_time"`
+	}
+	bookStruct := Book{
+		Id:      10,
+		Name:    "Linux驱动开发入门与实践",
+		Author:  "反馈",
+		Price:   0.32,
+		PubTime: nil,
+	}
+	dao.Book.Ctx(context.TODO()).Where("id", 10).Data(bookStruct).Update()
 }
 
 func (h *Hello) Respons(ctx context.Context, req *hello.ResponsReq) (res *hello.ParamsRes, err error) {
