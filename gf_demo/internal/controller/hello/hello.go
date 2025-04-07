@@ -6,6 +6,7 @@ package hello
 
 import (
 	"gf_demo/api/hello"
+	"github.com/gogf/gf/v2/database/gdb"
 	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
@@ -162,6 +163,89 @@ func (h *Hello) SelectData(req *ghttp.Request) {
 	}
 
 	req.Response.Writeln("你好你好呀")
+}
+
+/**
+ * 插入数据
+ * https://goframe.org/docs/core/gdb-chaining-insert-save
+ * Insert	报错，主键冲突
+ * Repalce	用提供的数据替换已存在同主键的数据
+ * Save	用提供的数据更新已存在的同主键数据
+ */
+func (h *Hello) InsertData(req *ghttp.Request) {
+	type Book struct {
+		Id      uint
+		Name    string
+		Author  string
+		Price   float64
+		PubTime *gtime.Time `orm:"publish_time"`
+	}
+
+	md := g.Model("book")
+	// map方式指定参数
+	data := g.Map{
+		"id":           8,
+		"name":         "Linux驱动开发入门与实践",
+		"author":       "郑强",
+		"price":        69,
+		"publish_time": gdb.Raw("now()"),
+	}
+	// Insert
+	bookId, err := md.Data(data).InsertAndGetId()
+	if err == nil {
+		req.Response.Writeln(bookId)
+	}
+
+	// Replace
+	book := Book{
+		Id:      8,
+		Name:    "Linux驱动开发入门与实践",
+		Author:  "郑强",
+		Price:   69.3,
+		PubTime: gtime.Now(),
+	}
+	md.Data(book).Replace()
+	// Save
+	md.Data(book).Save()
+
+	// 批量插入
+	md.Data([]Book{
+		{
+			Id:      9,
+			Name:    "Linux驱动开发入门与实践",
+			Author:  "郑强",
+			Price:   69.3,
+			PubTime: gtime.Now(),
+		},
+		{
+			Id:      10,
+			Name:    "Linux驱动开发入门与实践",
+			Author:  "郑强",
+			Price:   69.3,
+			PubTime: gtime.Now(),
+		},
+	}).Save()
+
+}
+
+/**
+ * 更新数据
+ * https://goframe.org/docs/core/gdb-chaining-update-delete
+ */
+func (h *Hello) UpdateData(req *ghttp.Request) {
+	data := g.Map{
+		"author": "郑强强",
+		"price":  69.333,
+	}
+	md := g.Model("book")
+	result, err := md.Where("author", "郑强").Data(data).Update()
+	if err == nil {
+		req.Response.Writeln(result)
+	}
+
+	//用来给指定字段增加/减少指定值
+	g.Model("book").WhereBetween("id", 7, 8).Increment("price", 2.5)
+	g.Model("book").WhereBetween("id", 9, 10).Decrement("price", 1.5)
 }
 
 func (h *Hello) Respons(ctx context.Context, req *hello.ResponsReq) (res *hello.ParamsRes, err error) {
