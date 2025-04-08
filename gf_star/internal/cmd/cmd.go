@@ -2,7 +2,9 @@ package cmd
 
 import (
 	"context"
+	"gf_star/internal/controller/account"
 	"gf_star/internal/controller/user"
+	"gf_star/internal/logic/middleware"
 
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
@@ -19,7 +21,15 @@ var (
 			s.Group("/", func(group *ghttp.RouterGroup) {
 				group.Middleware(ghttp.MiddlewareHandlerResponse)
 				group.Group("/v1", func(group *ghttp.RouterGroup) {
-					group.Bind(user.NewV1())
+					group.Bind(
+						user.NewV1(),
+					)
+					group.Group("/", func(group *ghttp.RouterGroup) {
+						group.Middleware(middleware.Auth)
+						group.Bind(
+							account.NewV1(),
+						)
+					})
 				})
 			})
 			s.Run()
