@@ -11,66 +11,74 @@ import (
 	"github.com/gogf/gf/v2/frame/g"
 )
 
-// UsersDao is the data access object for the table users.
-type UsersDao struct {
+// WordsDao is the data access object for the table words.
+type WordsDao struct {
 	table    string             // table is the underlying table name of the DAO.
 	group    string             // group is the database configuration group name of the current DAO.
-	columns  UsersColumns       // columns contains all the column names of Table for convenient usage.
+	columns  WordsColumns       // columns contains all the column names of Table for convenient usage.
 	handlers []gdb.ModelHandler // handlers for customized model modification.
 }
 
-// UsersColumns defines and stores column names for the table users.
-type UsersColumns struct {
-	Id        string //
-	Username  string //
-	Password  string //
-	Email     string //
-	CreatedAt string //
-	UpdatedAt string //
+// WordsColumns defines and stores column names for the table words.
+type WordsColumns struct {
+	Id                 string //
+	Uid                string //
+	Word               string //
+	Definition         string //
+	ExampleSentence    string //
+	ChineseTranslation string //
+	Pronunciation      string //
+	ProficiencyLevel   string //
+	CreatedAt          string //
+	UpdatedAt          string //
 }
 
-// usersColumns holds the columns for the table users.
-var usersColumns = UsersColumns{
-	Id:        "id",
-	Username:  "username",
-	Password:  "password",
-	Email:     "email",
-	CreatedAt: "created_at",
-	UpdatedAt: "updated_at",
+// wordsColumns holds the columns for the table words.
+var wordsColumns = WordsColumns{
+	Id:                 "id",
+	Uid:                "uid",
+	Word:               "word",
+	Definition:         "definition",
+	ExampleSentence:    "example_sentence",
+	ChineseTranslation: "chinese_translation",
+	Pronunciation:      "pronunciation",
+	ProficiencyLevel:   "proficiency_level",
+	CreatedAt:          "created_at",
+	UpdatedAt:          "updated_at",
 }
 
-// NewUsersDao creates and returns a new DAO object for table data access.
-func NewUsersDao(handlers ...gdb.ModelHandler) *UsersDao {
-	return &UsersDao{
+// NewWordsDao creates and returns a new DAO object for table data access.
+func NewWordsDao(handlers ...gdb.ModelHandler) *WordsDao {
+	return &WordsDao{
 		group:    "default",
-		table:    "users",
-		columns:  usersColumns,
+		table:    "words",
+		columns:  wordsColumns,
 		handlers: handlers,
 	}
 }
 
 // DB retrieves and returns the underlying raw database management object of the current DAO.
-func (dao *UsersDao) DB() gdb.DB {
+func (dao *WordsDao) DB() gdb.DB {
 	return g.DB(dao.group)
 }
 
 // Table returns the table name of the current DAO.
-func (dao *UsersDao) Table() string {
+func (dao *WordsDao) Table() string {
 	return dao.table
 }
 
 // Columns returns all column names of the current DAO.
-func (dao *UsersDao) Columns() UsersColumns {
+func (dao *WordsDao) Columns() WordsColumns {
 	return dao.columns
 }
 
 // Group returns the database configuration group name of the current DAO.
-func (dao *UsersDao) Group() string {
+func (dao *WordsDao) Group() string {
 	return dao.group
 }
 
 // Ctx creates and returns a Model for the current DAO. It automatically sets the context for the current operation.
-func (dao *UsersDao) Ctx(ctx context.Context) *gdb.Model {
+func (dao *WordsDao) Ctx(ctx context.Context) *gdb.Model {
 	model := dao.DB().Model(dao.table)
 	for _, handler := range dao.handlers {
 		model = handler(model)
@@ -84,6 +92,6 @@ func (dao *UsersDao) Ctx(ctx context.Context) *gdb.Model {
 //
 // Note: Do not commit or roll back the transaction in function f,
 // as it is automatically handled by this function.
-func (dao *UsersDao) Transaction(ctx context.Context, f func(ctx context.Context, tx gdb.TX) error) (err error) {
+func (dao *WordsDao) Transaction(ctx context.Context, f func(ctx context.Context, tx gdb.TX) error) (err error) {
 	return dao.Ctx(ctx).Transaction(ctx, f)
 }

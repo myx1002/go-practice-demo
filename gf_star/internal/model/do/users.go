@@ -13,9 +13,9 @@ import (
 type Users struct {
 	g.Meta    `orm:"table:users, do:true"`
 	Id        interface{} //
-	Username  interface{} // 用户名称
-	Password  interface{} // 密码
-	Email     interface{} // 邮箱
+	Username  interface{} //
+	Password  interface{} //
+	Email     interface{} //
 	CreatedAt *gtime.Time //
 	UpdatedAt *gtime.Time //
 }
