@@ -11,3 +11,13 @@ type RegisterReq struct {
 
 type RegisterRes struct {
 }
+
+type LoginReq struct {
+	g.Meta   `path:"users/login" method:"post" tags:"User" sm:"登录" tags:"用户"`
+	UserName string `v:"required|length:6,30#请输入用户名|用户名长度为:min到:max位" json:"username" dc:"用户名"`
+	Password string `v:"required|length:6,30#请输入密码|密码长度为:min到:max位" json:"password" dc:"密码"`
+}
+
+type LoginRes struct {
+	Token string `json:"token" dc:"在需要鉴权的接口中header加入Authorization: token"`
+}
