@@ -16,7 +16,6 @@ var (
 		Brief: "start http server",
 		Func: func(ctx context.Context, parser *gcmd.Parser) (err error) {
 			s := g.Server()
-			s.SetPort(8881)
 			// 开启静态资源访问
 			s.SetServerRoot("resource/public")
 
@@ -58,6 +57,9 @@ var (
 					hello.NewHello(),
 					user.New(),
 				)
+				group.GET("/swagger", func(req *ghttp.Request) {
+					req.Response.WriteTpl("/swagger.html")
+				})
 			})
 
 			s.Run()
