@@ -13,6 +13,9 @@ import (
 func main() {
 	var err error
 
+	// 全局设置i18n
+	g.I18n().SetLanguage("zh-CN")
+
 	// 检测数据库是否正常连接
 	err = connDb()
 	if err != nil {
