@@ -5,6 +5,7 @@ import (
 	v1 "gf_star/api/word/v1"
 	"gf_star/internal/dao"
 	"gf_star/internal/model/do"
+	"gf_star/internal/model/entity"
 	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/frame/g"
 )
@@ -117,6 +118,31 @@ func (w *Word) Create(ctx context.Context, in CreateInput) error {
 		Pronunciation:      in.Pronunciation,
 		ProficiencyLevel:   in.ProficiencyLevel,
 	}).Insert()
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (w *Word) Detail(ctx context.Context, id, uid uint) (word *entity.Words, err error) {
+	err = dao.Words.Ctx(ctx).Where(g.Map{
+		dao.Words.Columns().Id:  id,
+		dao.Words.Columns().Uid: uid,
+	}).Scan(&word)
+
+	if err != nil {
+		return nil, err
+	}
+	return
+}
+
+func (w *Word) Delete(ctx context.Context, id, uid uint) error {
+	_, err := dao.Words.Ctx(ctx).Where(g.Map{
+		dao.Words.Columns().Id:  id,
+		dao.Words.Columns().Uid: uid,
+	}).Delete()
 
 	if err != nil {
 		return err

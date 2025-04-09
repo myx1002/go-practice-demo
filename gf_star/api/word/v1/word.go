@@ -1,6 +1,9 @@
 package v1
 
-import "github.com/gogf/gf/v2/frame/g"
+import (
+	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/os/gtime"
+)
 
 type ProficiencyLevel uint
 
@@ -37,4 +40,29 @@ type WordUpdateReq struct {
 }
 
 type WordUpdateRes struct {
+}
+
+type WordDeleteReq struct {
+	g.Meta `path:"words/{id}" method:"delete" sm:"删除" tags:"单词"`
+	Id     uint `v:"required|length:1,20#请输入单词id|单词id长度为1-20位" dc:"单词id"`
+}
+
+type WordDeleteRes struct {
+}
+
+type WordDetailReq struct {
+	g.Meta `path:"words/{id}" method:"get" sm:"详情" tags:"单词"`
+	Id     uint `v:"required|length:1,20#请输入单词id|单词id长度为1-20位" dc:"单词id"`
+}
+
+type WordDetailRes struct {
+	Id                 uint             `json:"id"                 dc:"单词id"`
+	Word               string           `json:"word"               dc:"单词"`
+	Definition         string           `json:"definition"         dc:"单词定义"`
+	ExampleSentence    string           `json:"exampleSentence"    dc:"例句"`
+	ChineseTranslation string           `json:"chineseTranslation" dc:"中文翻译"`
+	Pronunciation      string           `json:"pronunciation"      dc:"发音"`
+	ProficiencyLevel   ProficiencyLevel `json:"proficiencyLevel"   dc:"熟练度，1最低，5最高"`
+	CreatedAt          *gtime.Time      `json:"createdAt"          dc:"创建时间"`
+	UpdatedAt          *gtime.Time      `json:"updatedAt"          dc:"更新时间"`
 }
