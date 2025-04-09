@@ -150,3 +150,20 @@ func (w *Word) Delete(ctx context.Context, id, uid uint) error {
 
 	return nil
 }
+
+func (w *Word) List(ctx context.Context, uid uint, req v1.WordListReq) (words []entity.Words, total int, err error) {
+	var cl = dao.Words.Columns()
+	orm := dao.Words.Ctx(ctx).Where(cl.Uid, uid)
+
+	if len(req.Word) != 0 {
+		orm = orm.WhereLike(cl.Word, "%"+req.Word+"%")
+	}
+
+	err = orm.OrderDesc(cl.CreatedAt).OrderDesc(cl.Id).Page(req.Page, req.Size).ScanAndCount(&words, &total, false)
+
+	if err != nil {
+		return nil, 0, err
+	}
+
+	return
+}

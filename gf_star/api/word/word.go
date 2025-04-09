@@ -15,4 +15,5 @@ type IWordV1 interface {
 	WordUpdate(ctx context.Context, req *v1.WordUpdateReq) (res *v1.WordUpdateRes, err error)
 	WordDelete(ctx context.Context, req *v1.WordDeleteReq) (res *v1.WordDeleteRes, err error)
 	WordDetail(ctx context.Context, req *v1.WordDetailReq) (res *v1.WordDetailRes, err error)
+	WordList(ctx context.Context, req *v1.WordListReq) (res *v1.WordListRes, err error)
 }

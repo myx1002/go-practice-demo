@@ -66,3 +66,15 @@ type WordDetailRes struct {
 	CreatedAt          *gtime.Time      `json:"createdAt"          dc:"创建时间"`
 	UpdatedAt          *gtime.Time      `json:"updatedAt"          dc:"更新时间"`
 }
+
+type WordListReq struct {
+	g.Meta `path:"words" method:"get" sm:"列表" tags:"单词"`
+	Page   int    `v:"min:1#请输入正确的页码" df:"1" dc:"页码"`
+	Size   int    `v:"min:1#请输入正确的页大小" df:"10" dc:"页大小"`
+	Word   string `dc:"单词"`
+}
+
+type WordListRes struct {
+	List  []WordDetailRes `json:"list" dc:"列表"`
+	Total int             `json:"total" dc:"总数"`
+}
