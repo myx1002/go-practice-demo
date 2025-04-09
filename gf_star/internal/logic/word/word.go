@@ -26,12 +26,70 @@ type CreateInput struct {
 	ProficiencyLevel   v1.ProficiencyLevel
 }
 
-func (w *Word) Create(ctx context.Context, in CreateInput) error {
+type UpdateInput struct {
+	Id                 uint
+	Uid                uint
+	Word               string
+	Definition         string
+	ExampleSentence    string
+	ChineseTranslation string
+	Pronunciation      string
+	ProficiencyLevel   v1.ProficiencyLevel
+}
+
+func (w *Word) Update(ctx context.Context, in UpdateInput) error {
+	var cl = dao.Words.Columns()
+
+	// 判断这个id的单词是否存在
+	exist, err := dao.Words.Ctx(ctx).
+		Where(cl.Uid, in.Uid).
+		Where(cl.Id, in.Id).
+		Exist()
+	if err != nil {
+		return err
+	}
+
+	if !exist {
+		return gerror.New("单词不存在")
+	}
+
+	// 判断word是否重复
+	exist, err = dao.Words.Ctx(ctx).
+		Where(cl.Uid, in.Uid).
+		Where(cl.Word, in.Word).
+		WhereNot(cl.Id, in.Id).
+		Exist()
+
+	if err != nil {
+		return err
+	}
+
+	if exist {
+		return gerror.New("单词已存在")
+	}
+
+	_, err = dao.Words.Ctx(ctx).Data(do.Words{
+		Word:               in.Word,
+		Definition:         in.Definition,
+		ExampleSentence:    in.ExampleSentence,
+		ChineseTranslation: in.ChineseTranslation,
+		Pronunciation:      in.Pronunciation,
+		ProficiencyLevel:   in.ProficiencyLevel,
+	}).Where(cl.Id, in.Id).Update()
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (w *Word) CheckWordExists(ctx context.Context, word string, uid uint) error {
 	var cl = dao.Words.Columns()
 
 	count, err := dao.Words.Ctx(ctx).Data(g.Map{
-		cl.Uid:  in.Uid,
-		cl.Word: in.Word,
+		cl.Uid:  uid,
+		cl.Word: word,
 	}).Count()
 
 	if err != nil {
@@ -42,7 +100,15 @@ func (w *Word) Create(ctx context.Context, in CreateInput) error {
 		return gerror.New("单词已存在")
 	}
 
-	_, err = dao.Words.Ctx(ctx).Data(do.Words{
+	return nil
+}
+
+func (w *Word) Create(ctx context.Context, in CreateInput) error {
+	if err := w.CheckWordExists(ctx, in.Word, in.Uid); err != nil {
+		return err
+	}
+
+	_, err := dao.Words.Ctx(ctx).Data(do.Words{
 		Uid:                in.Uid,
 		Word:               in.Word,
 		Definition:         in.Definition,

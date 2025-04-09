@@ -22,9 +22,9 @@ type UsersDao struct {
 // UsersColumns defines and stores column names for the table users.
 type UsersColumns struct {
 	Id        string //
-	Username  string //
-	Password  string //
-	Email     string //
+	Username  string // 用户名称
+	Password  string // 密码
+	Email     string // 邮箱
 	CreatedAt string //
 	UpdatedAt string //
 }
