@@ -29,6 +29,14 @@ func (u *Users) Info(ctx context.Context) (user *entity.Users, err error) {
 	return
 }
 
+func (u *Users) GetUid(ctx context.Context) (uint, error) {
+	user, err := u.Info(ctx)
+	if err != nil {
+		return 0, err
+	}
+	return user.Id, nil
+}
+
 func (u *Users) Login(ctx context.Context, username, password string) (tokenString string, err error) {
 	var user entity.Users
 	err = dao.Users.Ctx(ctx).Where("username", username).Scan(&user)

@@ -4,6 +4,7 @@ import (
 	"context"
 	"gf_star/internal/controller/account"
 	"gf_star/internal/controller/user"
+	"gf_star/internal/controller/word"
 	"gf_star/internal/logic/middleware"
 
 	"github.com/gogf/gf/v2/frame/g"
@@ -28,6 +29,7 @@ var (
 						group.Middleware(middleware.Auth)
 						group.Bind(
 							account.NewV1(),
+							word.NewV1(),
 						)
 					})
 				})
