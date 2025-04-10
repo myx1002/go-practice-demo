@@ -16,4 +16,6 @@ type IWordV1 interface {
 	WordDelete(ctx context.Context, req *v1.WordDeleteReq) (res *v1.WordDeleteRes, err error)
 	WordDetail(ctx context.Context, req *v1.WordDetailReq) (res *v1.WordDetailRes, err error)
 	WordList(ctx context.Context, req *v1.WordListReq) (res *v1.WordListRes, err error)
+	WordRandomList(ctx context.Context, req *v1.WordRandomListReq) (res *v1.WordRandomListRes, err error)
+	SetLevel(ctx context.Context, req *v1.SetLevelReq) (res *v1.SetLevelRes, err error)
 }

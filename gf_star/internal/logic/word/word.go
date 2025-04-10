@@ -151,7 +151,7 @@ func (w *Word) Delete(ctx context.Context, id, uid uint) error {
 	return nil
 }
 
-func (w *Word) List(ctx context.Context, uid uint, req v1.WordListReq) (words []entity.Words, total int, err error) {
+func (w *Word) List(ctx context.Context, uid uint, req v1.WordListReq) (words []*entity.Words, total int, err error) {
 	var cl = dao.Words.Columns()
 	orm := dao.Words.Ctx(ctx).Where(cl.Uid, uid)
 
@@ -164,6 +164,35 @@ func (w *Word) List(ctx context.Context, uid uint, req v1.WordListReq) (words []
 	if err != nil {
 		return nil, 0, err
 	}
+
+	return
+}
+
+func (w *Word) RandomList(ctx context.Context, size int, uid uint) (words []*entity.Words, err error) {
+	err = dao.Words.Ctx(ctx).Where("uid", uid).Limit(size).OrderRandom().Scan(&words)
+	return
+}
+
+func (w *Word) SetLevel(ctx context.Context, id uint, level v1.ProficiencyLevel, uid uint) (err error) {
+	exist, err := dao.Words.Ctx(ctx).Data(entity.Words{
+		Id:  id,
+		Uid: uid,
+	}).Exist()
+
+	if err != nil {
+		return
+	}
+
+	if !exist {
+		return gerror.New("单词不存在")
+	}
+
+	_, err = dao.Words.Ctx(ctx).Data(g.Map{
+		dao.Words.Columns().ProficiencyLevel: uint(level),
+	}).Where(g.Map{
+		dao.Words.Columns().Id:  id,
+		dao.Words.Columns().Uid: uid,
+	}).Update()
 
 	return
 }

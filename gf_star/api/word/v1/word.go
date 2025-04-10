@@ -78,3 +78,21 @@ type WordListRes struct {
 	List  []WordDetailRes `json:"list" dc:"列表"`
 	Total int             `json:"total" dc:"总数"`
 }
+
+type WordRandomListReq struct {
+	g.Meta `path:"words/random" method:"get" sm:"随机列表" tags:"单词"`
+	Size   int `v:"min:1#请输入正确的页大小" df:"10" dc:"页大小"`
+}
+
+type WordRandomListRes struct {
+	List []WordDetailRes `json:"list" dc:"列表"`
+}
+
+type SetLevelReq struct {
+	g.Meta `path:"words/{id}/level" method:"patch"`
+	Id     uint             `json:"id" v:"required"`
+	Level  ProficiencyLevel `json:"level" v:"required|between:1,5"`
+}
+
+type SetLevelRes struct {
+}
