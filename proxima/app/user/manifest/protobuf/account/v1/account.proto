@@ -1,0 +1,49 @@
+// syntax 规定本文件语法版本；
+syntax = "proto3";
+
+// 定义的是服务命名空间，可以理解为包名；
+package account.v1;
+
+// 设定编译选项，go_package指定生成的Go代码所属的包名。在GoFrame中固定格式是项目名 + app + 微服务名称 + api + 模块名 + v1；
+option go_package = "proxima/app/user/api/account/v1";
+
+// 代表引入了其他proto文件。引入的这个文件是gf gen pbentity生成的；
+import "pbentity/users.proto";
+
+
+// 定义远程调用方法，一般是RPC，规定其请求和响应参数；
+service Account {
+    rpc UserRegister(UserRegisterReq) returns (UserRegisterRes);
+    rpc UserLogin(UserLoginReq) returns (UserLoginRes);
+    rpc UserInfo(UserInfoReq) returns (UserInfoRes);
+}
+
+// 定义数据结构，string是数据类型，username是字段名，赋值号后面的递增数字是字段编号。
+// 最后面的注释是框架提供的参数校检，使用方式普通的HTTP接口一致。
+message UserRegisterReq {
+    string username = 1;
+    string password = 2;
+    string email    = 3;
+}
+
+message UserRegisterRes {
+    uint32 id = 1;
+}
+
+message UserLoginReq {
+  string username = 1;
+  string password = 2;
+}
+
+message UserLoginRes {
+  string token = 1;
+}
+
+message UserInfoReq {
+  string token = 1;
+}
+
+// 调用引入的数据模型，和go的结构体几乎一致。
+message UserInfoRes {
+  pbentity.Users user = 1;
+}
